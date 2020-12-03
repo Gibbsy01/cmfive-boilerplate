@@ -1,0 +1,54 @@
+# The Docker image to run your workspace in. Defaults to gitpod/workspace-full
+image: 
+    file: .gitpod.Dockerfile
+# Command to start on workspace startup (optional)
+#tasks:
+#  - init: yarn install
+#    command: yarn build
+# Ports to expose on workspace startup (optional)
+ports:
+  - port: 8001
+    onOpen: ignore
+  - port: 3306
+    onOpen: ignore
+tasks:
+  - init: composer install
+    command: echo "Hallo"
+  - name: MySQL
+    command: >
+        mysqld
+  - name: Apache
+    command: >
+        ENV APACHE_DOCROOT_IN_REPO=""
+        apachectl start;
+        multitail /var/log/apache2/error.log -I /var/log/apache2/access.log
+
+
+# mysql commands to setup database
+# 1. "create database cmfive;"
+# 2. "CREATE USER 'cmfive'@'localhost' IDENTIFIED WITH mysql_native_password BY 'cmfive';"
+# 3. "GRANT ALL PRIVILEGES ON cmfive . * TO 'cmfive'@'localhost';"
+# 4. "FLUSH PRIVILEGES;"
+
+# duplicate config.php.example and rename
+
+# replace relevent database config items with
+#     "username"  => getenv('DB_USERNAME') ? : "cmfive",
+#     "password"  => getenv('DB_PASSWORD') ? : "cmfive",
+#     "database"  => getenv('DB_DATABASE') ? : "cmfive",
+
+# remove this from config.php
+# Config::set('system.encryption', [
+#     'key' => '',
+#     'iv'  => ''
+# ]);
+
+# terminal commands to serve site
+# 1. "apachectl restart"
+
+# run 
+# "php cmfive.php"
+# choose 1
+# choose 4
+# choose 2 then 3
+
